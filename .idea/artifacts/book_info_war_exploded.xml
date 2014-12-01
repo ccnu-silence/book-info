@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="book-info:war exploded">
-    <output-path>$PROJECT_DIR$/target/book-info</output-path>
+    <output-path>$PROJECT_DIR$/server/target/book-info</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -12,6 +12,9 @@
           <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-servlet-api:7.0.56" />
           <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.7.3" />
         </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="E:\workspace\book-info\server\target/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="book-info/web/Web" />
     </root>
