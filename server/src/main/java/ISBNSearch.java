@@ -1,21 +1,54 @@
+import com.pera.entity.Book;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 
 import java.io.IOException;
 
 /**
+ * 使用京东的图书搜索信息
+ * 首先查找由京东发货的图书，这种情况下，图书信息更加的完整，全面
  * Created by phnix on 11/17/2014.
  */
 public class ISBNSearch {
-    public static String search(String isbnString) throws IOException {
+    public static Book search(String isbnString) throws IOException {
         String title = null;
-        String searchUrl = "http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=" + isbnString;
+        String searchUrl = "http://search.jd.com/Search?keyword=" + isbnString;
         System.out.println(searchUrl);
         Document document = Jsoup.connect(searchUrl).timeout(10000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
-        String bookUrl = document.select("#result_0 .a-link-normal.a-text-normal").attr("href");
-        title = document.select("#result_0 .a-link-normal.s-access-detail-page.a-text-normal h2").text();
-        System.out.println("url:"+bookUrl+";title:"+title);
-        return title;
+
+        Elements books = document.select("#plist ul li.item-book");
+        Element marchBook = null;
+        for (Element book : books) {
+            if (book.select(".service").first().text().equals("由 京东 发货")){
+                marchBook = book;
+                break;
+            }
+        }
+        if (marchBook == null) {
+            marchBook = books.first();
+        }
+        String bookUrl = marchBook.select("div a").attr("href");
+        Document bookDoc = Jsoup.connect(bookUrl).timeout(10000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
+        Elements elements = bookDoc.select("#product-detail-1 ul li");
+        Book book = new Book();
+        title = bookDoc.select("#name h1").first().ownText();
+        book.setTitle(title);
+        String author = bookDoc.select("#product-authorinfo").text();
+        book.setAuthor(author);
+        for (Element element : elements) {
+            String liStr = element.text();
+            if (liStr.indexOf("ISBN") != -1) {
+                book.setIsbn(liStr.substring(5));
+                System.out.println(book.getIsbn());
+            } else if (liStr.indexOf("出版社") != -1) {
+                book.setPress(liStr.substring(4));
+            }else if(liStr.indexOf("页数") != -1) {
+                book.setPages(liStr.substring(3));
+            }
+        }
+        return book;
     }
 }
