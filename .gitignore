@@ -38,3 +38,5 @@ proguard/
 hs_err_pid*
 target/
 server/target
+android/out
+android/test/out
