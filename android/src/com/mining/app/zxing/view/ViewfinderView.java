@@ -244,7 +244,7 @@ public final class ViewfinderView extends View {
 	 * scanning display.
 	 *
 	 * @param barcode
-	 *            An image of the decoded barcode.
+	 * An image of the decoded barcode.
 	 */
 	public void drawResultBitmap(Bitmap barcode) {
 		resultBitmap = barcode;

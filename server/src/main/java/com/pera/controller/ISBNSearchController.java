@@ -1,8 +1,17 @@
+package com.pera.controller;
+
 import com.pera.entity.Book;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import java.io.IOException;
@@ -12,8 +21,12 @@ import java.io.IOException;
  * 首先查找由京东发货的图书，这种情况下，图书信息更加的完整，全面
  * Created by phnix on 11/17/2014.
  */
-public class ISBNSearch {
-    public static Book search(String isbnString) throws IOException {
+@Controller
+@RequestMapping("search")
+public class ISBNSearchController {
+    @RequestMapping(value = "{isbn}")
+    @ResponseBody
+    public static ResponseEntity<Book> search(@PathVariable("isbn") String isbnString) throws IOException {
         String title = null;
         String searchUrl = "http://search.jd.com/Search?keyword=" + isbnString;
         System.out.println(searchUrl);
@@ -49,6 +62,6 @@ public class ISBNSearch {
                 book.setPages(liStr.substring(3));
             }
         }
-        return book;
+        return new ResponseEntity<Book>(book, HttpStatus.OK);
     }
 }
