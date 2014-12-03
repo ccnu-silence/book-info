@@ -35,7 +35,8 @@ public class ISBNSearchController {
         Elements books = document.select("#plist ul li.item-book");
         Element marchBook = null;
         for (Element book : books) {
-            if (book.select(".service").first().text().equals("由 京东 发货")){
+            if (book.select(".service").first().text().equals("由 京东 发货")
+                    && book.select(".p-img .pi-ebook").size()==0){
                 marchBook = book;
                 break;
             }

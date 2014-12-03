@@ -116,13 +116,12 @@ public class MipcaActivityCapture extends Activity implements Callback {
 		playBeepSoundAndVibrate();
 		String resultString = result.getText();
 		if (resultString.equals("")) {
-			Toast.makeText(MipcaActivityCapture.this, "Scan failed!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MipcaActivityCapture.this,
+					"Scan failed!", Toast.LENGTH_SHORT).show();
 		}else {
+
 			Intent resultIntent = new Intent();
-			Bundle bundle = new Bundle();
-			bundle.putString("result", resultString);
-			bundle.putParcelable("bitmap", barcode);
-			resultIntent.putExtras(bundle);
+			resultIntent.putExtra("book", resultString);
 			this.setResult(RESULT_OK, resultIntent);
 		}
 		MipcaActivityCapture.this.finish();
