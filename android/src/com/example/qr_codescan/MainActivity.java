@@ -4,8 +4,6 @@ package com.example.qr_codescan;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.pera.model.Book;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 public class MainActivity extends Activity {
@@ -42,7 +36,7 @@ public class MainActivity extends Activity {
 
         mTextView = (TextView) findViewById(R.id.result);
         mImageView = (ImageView) findViewById(R.id.qrcode_bitmap);
-
+        Button btnList = (Button) findViewById(R.id.button2);
         //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
         //扫描完了之后调到该界面
         Button mButton = (Button) findViewById(R.id.button1);
@@ -56,29 +50,38 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
             }
         });
+
+        btnList.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, BookListActivity.class);
+                startActivity(intent);
+            }
+        });
     }
-    private Handler handler = new Handler(){
+
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what)
-            {
+            switch (msg.what) {
                 case BOOK_JSON_OK:
-                    Book book = (Book)msg.obj;
+                    Book book = (Book) msg.obj;
                     mTextView.setText(book.getTitle());
-                    URL picUrl;
-                    try {
-                        picUrl = new URL("http://www.baidu.com/img/bd_logo1.png");
-                        Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-//                        mImageView.setImageBitmap(pngBM);
-                        mImageView.setImageURI(Uri.parse("http://www.baidu.com/img/bd_logo1.png"));
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    ImageLoadedCallback callback = new ImageLoadedCallback() {
+                        @Override
+                        public void loaded(Bitmap bitMap, String url) {
+//                            if (url.equals(mImageView.getTag())) {
+                                mImageView.setImageBitmap(bitMap);
+//                            }
+                        }
+                    };
+                    String imageUrl = "http://www.baidu.com/img/bd_logo1.png";
+                    new DownloadImageTask(callback).execute(imageUrl);
             }
         }
     };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -98,7 +101,7 @@ public class MainActivity extends Activity {
                                     Book book = gson.fromJson(response, Book.class);
                                     Message message = new Message();
                                     message.what = BOOK_JSON_OK;
-                                    message.obj=book;
+                                    message.obj = book;
                                     handler.sendMessage(message);
                                 }
 
@@ -111,5 +114,4 @@ public class MainActivity extends Activity {
                 break;
         }
     }
-
 }
