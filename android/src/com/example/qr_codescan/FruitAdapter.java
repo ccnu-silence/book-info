@@ -29,8 +29,11 @@ public class FruitAdapter extends ArrayAdapter<Fruit> {
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.fruit_image);
         TextView textView = (TextView)view.findViewById(R.id.fruit_name);
-        imageView.setImageResource(fruit.getImageId());
+//        imageView.setImageResource(R.drawable.ajax_loader);
         textView.setText(fruit.getName());
+
+        String imageUrl = "http://www.baidu.com/img/bd_logo1.png";
+        HttpUtil.setImageViewWithUrl(imageView, imageUrl);
         return view;
     }
 }

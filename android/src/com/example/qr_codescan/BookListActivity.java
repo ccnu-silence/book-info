@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class BookListActivity extends Activity {
 
-    private String[] data = {"apple", "hello", "phnix", "apple", "hello", "phnix", "apple", "hello", "phnix"};
+//    private String[] data = {"apple", "hello", "phnix", "apple", "hello", "phnix", "apple", "hello", "phnix"};
     private List<Fruit> fruitList = new ArrayList<Fruit>();
 
     @Override
