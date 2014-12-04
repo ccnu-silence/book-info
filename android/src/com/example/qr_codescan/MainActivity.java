@@ -68,16 +68,7 @@ public class MainActivity extends Activity {
                 case BOOK_JSON_OK:
                     Book book = (Book) msg.obj;
                     mTextView.setText(book.getTitle());
-                    ImageLoadedCallback callback = new ImageLoadedCallback() {
-                        @Override
-                        public void loaded(Bitmap bitMap, String url) {
-//                            if (url.equals(mImageView.getTag())) {
-                                mImageView.setImageBitmap(bitMap);
-//                            }
-                        }
-                    };
-                    String imageUrl = "http://www.baidu.com/img/bd_logo1.png";
-                    new DownloadImageTask(callback).execute(imageUrl);
+                    HttpUtil.setImageViewWithUrl(mImageView, book.getImage());
             }
         }
     };
@@ -85,13 +76,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//                            "http://182.92.186.171:8080/book-info/search/" + isbn,
         switch (requestCode) {
             case SCANNIN_GREQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     String isbn = data.getStringExtra("book"); // json
                     // 处理网络
                     HttpUtil.sendHttpRequest(
-                            "http://182.92.186.171:8080/book-info/search/" + isbn,
+                            "http://192.168.4.103:1106/search/" + isbn,
                             new HttpCallbackListener() {
                                 @Override
                                 public void onFinish(String response) {
@@ -104,7 +96,6 @@ public class MainActivity extends Activity {
                                     message.obj = book;
                                     handler.sendMessage(message);
                                 }
-
                                 @Override
                                 public void onError(Exception e) {
 

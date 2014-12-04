@@ -34,51 +34,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
 
-        <!-- 项目属性 -->
-        <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
-        <jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
-        <jdbc.driver.version>${h2.version}</jdbc.driver.version>
-
         <commons-codec.version>1.8</commons-codec.version>
         <ehcache-core.version>2.6.6</ehcache-core.version>
         <jsoup.version>1.7.3</jsoup.version>
         <rpc-api.version>1.1.1</rpc-api.version>
         <cxf.version>2.5.2</cxf.version>
         <fastjson.version>1.2.2</fastjson.version>
+        <tomcat.version>7.0.56</tomcat.version>
+        <mysql.version>5.1.34</mysql.version>
     </properties>
 
 
     <dependencies>
-
-
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc4</artifactId>
-            <version>4.0</version>
-        </dependency>
-
-        <!-- web service -->
-        <dependency>
-            <groupId>javax.xml.rpc</groupId>
-            <artifactId>javax.xml.rpc-api</artifactId>
-            <version>${rpc-api.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http-jetty</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
         <!-- Apache Commons FileUpload -->
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -195,20 +162,6 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- h2 一个java版的内存数据库，类似于sqlite -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>javax.servlet</groupId>-->
-        <!--<artifactId>javax.servlet-api</artifactId>-->
-        <!--<version>3.0.1</version>-->
-        <!--</dependency>-->
-
         <!-- JSON begin -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -269,7 +222,13 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-servlet-api</artifactId>
-            <version>7.0.56</version>
+            <version>${tomcat.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
     </dependencies>
 

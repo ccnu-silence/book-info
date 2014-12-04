@@ -1,10 +1,12 @@
 package com.pera.controller;
 
 import com.pera.entity.Book;
+import com.pera.service.BookService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,12 +24,19 @@ import java.io.IOException;
  * Created by phnix on 11/17/2014.
  */
 @Controller
-@RequestMapping("search")
+@RequestMapping("/")
 public class ISBNSearchController {
-    @RequestMapping(value = "{isbn}")
+    @Autowired
+    BookService bookService;
+
+    @RequestMapping(value = "search/{isbn}")
     @ResponseBody
-    public static ResponseEntity<Book> search(@PathVariable("isbn") String isbnString) throws IOException {
-        String title = null;
+    public ResponseEntity<Book> search(@PathVariable("isbn") String isbnString) throws IOException {
+        String title;
+        Book bookObject = bookService.findByIsbn(isbnString);
+        if (bookObject != null){
+            return new ResponseEntity<Book>(bookObject, HttpStatus.OK);
+        }
         String searchUrl = "http://search.jd.com/Search?keyword=" + isbnString;
         System.out.println(searchUrl);
         Document document = Jsoup.connect(searchUrl).timeout(10000).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2").get();
@@ -51,6 +60,7 @@ public class ISBNSearchController {
         title = bookDoc.select("#name h1").first().ownText();
         book.setTitle(title);
         String author = bookDoc.select("#product-authorinfo").text();
+        book.setImage(bookDoc.select("#spec-n1 img").attr("src"));
         book.setAuthor(author);
         for (Element element : elements) {
             String liStr = element.text();
@@ -63,6 +73,16 @@ public class ISBNSearchController {
                 book.setPages(liStr.substring(3));
             }
         }
+        bookService.save(book);
         return new ResponseEntity<Book>(book, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "mark/{isbn}")
+    @ResponseBody
+    public boolean recordBook(@PathVariable(value = "isbn") String isbn){
+        Book book = bookService.findByIsbn(isbn);
+        book.setRecord(true);
+        bookService.save(book);
+        return true;
     }
 }

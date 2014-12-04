@@ -1,15 +1,21 @@
 package com.pera.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by phnix on 2014/12/1.
  */
+@Entity
+@Table(name = "book")
 public class Book {
+    @Id
+    private String isbn;
     private String title;
     private String author;
     private String image;
     private String press;
-    private String isbn;
     private String pages;
+    private boolean isRecord;
 
     @Override
     public String toString() {
@@ -22,6 +28,7 @@ public class Book {
                 ", pages='" + pages + '\'' +
                 '}';
     }
+
 
     public String getPages() {
         return pages;
@@ -69,5 +76,14 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    @Column(columnDefinition = "boolean default false")
+    public boolean isRecord() {
+        return isRecord;
+    }
+
+    public void setRecord(boolean isRecord) {
+        this.isRecord = isRecord;
     }
 }
