@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 使用京东的图书搜索信息
@@ -84,5 +85,11 @@ public class ISBNSearchController {
         book.setRecord(true);
         bookService.save(book);
         return true;
+    }
+
+    @RequestMapping(value = "all")
+    public ResponseEntity<List<Book>> findAll(){
+        List<Book> books = bookService.findAll();
+        return new ResponseEntity<List<Book>>(books,HttpStatus.OK);
     }
 }
