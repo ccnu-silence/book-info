@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.pera.model.Book;
 import com.pera.model.Fruit;
 
 import java.util.ArrayList;
@@ -15,10 +19,11 @@ import java.util.List;
  * Created by phnix on 2014/12/4.
  */
 public class BookListActivity extends Activity implements ReFlashListView.IReflashListener {
-
-    //    private String[] data = {"apple", "hello", "phnix", "apple", "hello", "phnix", "apple", "hello", "phnix"};
-    private List<Fruit> fruitList = new ArrayList<Fruit>();
+    //    private List<Fruit> fruitList = new ArrayList<Fruit>();
+//    private List<Book> bookList = new ArrayList<Book>();
     private ReFlashListView listView;
+    private final static int BOOK_JSON_OK = 1;
+    BookListActivity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,27 +32,47 @@ public class BookListActivity extends Activity implements ReFlashListView.IRefla
         this.setContentView(R.layout.activity_list);
 
         initFruits();
-        FruitAdapter adapter = new FruitAdapter(BookListActivity.this,
-                R.layout.list_item, fruitList);
-
-        listView = (ReFlashListView) this.findViewById(R.id.listView);
-        listView.setInterface(this);
-        listView.setAdapter(adapter);
+        activity = this;
 
     }
 
-    private void initFruits() {
-        Fruit apple = new Fruit("apple", R.drawable.ic_launcher);
-        Fruit apple2 = new Fruit("apple", R.drawable.ic_launcher);
-        Fruit apple3 = new Fruit("apple", R.drawable.ic_launcher);
-        Fruit apple4 = new Fruit("apple", R.drawable.ic_launcher);
-        Fruit apple5 = new Fruit("apple", R.drawable.ic_launcher);
-        fruitList.add(apple);
-        fruitList.add(apple2);
-        fruitList.add(apple3);
-        fruitList.add(apple4);
-        fruitList.add(apple5);
+    private Handler handler = new Handler() {
 
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case BOOK_JSON_OK:
+                    List<Book> bookList = (List<Book>) msg.obj;
+                    BookAdapter adapter = new BookAdapter(BookListActivity.this,
+                            R.layout.list_item, bookList);
+                    listView = (ReFlashListView) activity.findViewById(R.id.listView);
+                    listView.setInterface(BookListActivity.this);
+                    listView.setAdapter(adapter);
+            }
+        }
+    };
+
+    private void initFruits() {
+        HttpUtil.sendHttpRequest("http://182.92.186.171:8080/search/all",
+                new HttpCallbackListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        Gson gson = new Gson();
+                        List<Book> bookList = gson.fromJson(response,
+                                new TypeToken<List<Book>>() {
+                                }.getType());
+
+                        Message message = new Message();
+                        message.what = BOOK_JSON_OK;
+                        message.obj = bookList;
+                        handler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
     }
 
     @Override

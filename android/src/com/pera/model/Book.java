@@ -10,6 +10,7 @@ public class Book {
     private String press;
     private String isbn;
     private String pages;
+    private boolean isRecord;
 
     @Override
     public String toString() {
@@ -69,5 +70,13 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public boolean isRecord() {
+        return isRecord;
+    }
+
+    public void setRecord(boolean isRecord) {
+        this.isRecord = isRecord;
     }
 }

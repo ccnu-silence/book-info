@@ -7,32 +7,31 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.pera.model.Fruit;
+import com.pera.model.Book;
 
 import java.util.List;
 
 /**
- * Created by phnix on 2014/12/4.
+ * Created by phnix on 12/5/2014.
  */
-public class FruitAdapter extends ArrayAdapter<Fruit> {
+public class BookAdapter extends ArrayAdapter<Book> {
+
     private int resourceId;
 
-    public FruitAdapter(Context context, int textViewResourceId, List<Fruit> objects) {
+    public BookAdapter(Context context, int textViewResourceId, List<Book> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Fruit fruit = getItem(position);
+        Book book = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.fruit_image);
         TextView textView = (TextView)view.findViewById(R.id.fruit_name);
-//        imageView.setImageResource(R.drawable.ajax_loader);
-        textView.setText(fruit.getName());
-
-        String imageUrl = "http://www.baidu.com/img/bd_logo1.png";
-        HttpUtil.setImageViewWithUrl(imageView, imageUrl);
+        textView.setText(book.getTitle());
+        HttpUtil.setImageViewWithUrl(imageView, book.getImage());
         return view;
     }
+
 }
