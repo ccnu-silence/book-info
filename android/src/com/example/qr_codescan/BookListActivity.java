@@ -53,7 +53,7 @@ public class BookListActivity extends Activity implements ReFlashListView.IRefla
     };
 
     private void initFruits() {
-        HttpUtil.sendHttpRequest("http://182.92.186.171:8080/search/all",
+        HttpUtil.sendHttpRequest("http://182.92.186.171:8080/book/all",
                 new HttpCallbackListener() {
                     @Override
                     public void onFinish(String response) {
@@ -82,6 +82,7 @@ public class BookListActivity extends Activity implements ReFlashListView.IRefla
             @Override
             public void run() {
                 Toast.makeText(BookListActivity.this, "已刷新", Toast.LENGTH_SHORT).show();
+                initFruits();
                 listView.reflashComplete();
             }
         }, 2000);
