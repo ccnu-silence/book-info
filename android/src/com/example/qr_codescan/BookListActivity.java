@@ -1,8 +1,10 @@
 package com.example.qr_codescan;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.pera.model.Fruit;
 
 import java.util.ArrayList;
@@ -23,13 +25,17 @@ public class BookListActivity extends Activity {
 
         initFruits();
         FruitAdapter adapter = new FruitAdapter(BookListActivity.this,
-                R.layout.fruit_item, fruitList);
+                R.layout.list_item, fruitList);
 
-        ListView listView = (ListView) this.findViewById(R.id.listView);
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(BookListActivity.this,
-//                android.R.layout.simple_list_item_1, data);
+        ReFlashListView listView = (ReFlashListView) this.findViewById(R.id.listView);
+        listView.setInterface(new ReFlashListView.IReflashListener() {
+            @Override
+            public void onReflash() {
+                Toast.makeText(BookListActivity.this, "已刷新", Toast.LENGTH_SHORT);
+            }
+        });
         listView.setAdapter(adapter);
+
     }
 
     private void initFruits() {
