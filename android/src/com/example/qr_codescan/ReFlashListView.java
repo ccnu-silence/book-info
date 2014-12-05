@@ -100,19 +100,16 @@ public class ReFlashListView extends ListView implements AbsListView.OnScrollLis
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
-        // TODO Auto-generated method stub
         this.firstVisibleItem = firstVisibleItem;
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        // TODO Auto-generated method stub
         this.scrollState = scrollState;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        // TODO Auto-generated method stub
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (firstVisibleItem == 0) {
