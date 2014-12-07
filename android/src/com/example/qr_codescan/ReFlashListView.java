@@ -17,7 +17,6 @@ import java.util.Date;
  * Created by phnix on 12/5/2014.
  */
 public class ReFlashListView extends ListView implements AbsListView.OnScrollListener {
-
     View header;// 顶部布局文件；
     int headerHeight;// 顶部布局文件的高度；
     int firstVisibleItem;// 当前第一个可见的item的位置；

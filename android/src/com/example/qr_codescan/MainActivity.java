@@ -3,10 +3,12 @@ package com.example.qr_codescan;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,7 +18,7 @@ import com.google.gson.Gson;
 import com.pera.model.Book;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GestureDetector.OnGestureListener {
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private final static int BOOK_JSON_OK = 1;
     /**
@@ -28,6 +30,7 @@ public class MainActivity extends Activity {
      */
     private ImageView mImageView;
 
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,29 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, BookListActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        gestureDetector = new GestureDetector(this);
+        gestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+                Log.v("test", "onDoubleTap");
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent motionEvent) {
+                Log.v("test", "onDoubleTapEvent");
+                Intent intent = new Intent(MainActivity.this, FileStoreActivity.class);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+                Log.v("test", "onSingleTapConfirmed");
+                return false;
             }
         });
     }
@@ -96,6 +122,7 @@ public class MainActivity extends Activity {
                                     message.obj = book;
                                     handler.sendMessage(message);
                                 }
+
                                 @Override
                                 public void onError(Exception e) {
 
@@ -104,5 +131,42 @@ public class MainActivity extends Activity {
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        Log.d("main", "on gesture down");
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+        Log.d("main", "show press");
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        Log.v("test", "onFling " + motionEvent.getX() + " " + motionEvent1.getX());
+        return true;
     }
 }
